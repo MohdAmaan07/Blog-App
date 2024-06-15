@@ -95,27 +95,39 @@ def delete_comment(id):
 @views.route('/like/<int:id>', methods=['GET'])
 @login_required
 def like_post(id):
+    post = Post.query.get_or_404(id)
     like = Like.query.filter_by(author=current_user.id, post_id=id).first()
+    dislike = Dislike.query.filter_by(author=current_user.id, post_id=id).first()
+
     if like:
         db.session.delete(like)
         db.session.commit()
     else:
-        like = Like(author=current_user.id, post_id=id)
-        db.session.add(like)
+        if dislike:
+            db.session.delete(dislike)
+        new_like = Like(author=current_user.id, post_id=id)
+        db.session.add(new_like)
         db.session.commit()
+
     return redirect(url_for('views.home'))
 
 @views.route('/dislike/<int:id>', methods=['GET'])
 @login_required
 def dislike_post(id):
+    post = Post.query.get_or_404(id)
+    like = Like.query.filter_by(author=current_user.id, post_id=id).first()
     dislike = Dislike.query.filter_by(author=current_user.id, post_id=id).first()
+
     if dislike:
         db.session.delete(dislike)
         db.session.commit()
     else:
-        dislike = Dislike(author=current_user.id, post_id=id)
-        db.session.add(dislike)
+        if like:
+            db.session.delete(like)
+        new_dislike = Dislike(author=current_user.id, post_id=id)
+        db.session.add(new_dislike)
         db.session.commit()
+
     return redirect(url_for('views.home'))
 
 

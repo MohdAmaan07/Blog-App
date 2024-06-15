@@ -10,6 +10,7 @@ class Post(db.Model):
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     comment = db.relationship('Comment', backref = "post", passive_deletes = True)
     likes = db.relationship('Like', backref = "post", passive_deletes = True)
+    dislikes = db.relationship('Dislike', backref = "post", passive_deletes = True)
 
     
     
@@ -22,6 +23,7 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref = "user", passive_deletes = True)
     comment = db.relationship('Comment', backref = "user", passive_deletes = True)
     likes = db.relationship('Like', backref = "user", passive_deletes = True)
+    dislikes = db.relationship('Dislike', backref = "user", passive_deletes = True)
 
     
 class Comment(db.Model):
@@ -35,11 +37,10 @@ class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
-    date_posted = db.Column(db.DateTime(timezone = True), nullable=False, default=datetime.now(timezone.utc))
-    
+
 class Dislike(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
-    date_posted = db.Column(db.DateTime(timezone = True), nullable=False, default=datetime.now(timezone.utc))
+
     

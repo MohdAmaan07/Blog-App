@@ -14,7 +14,7 @@ def create_app(config_class = Config):
     
     from app.views import views
     from app.auth import auth
-    from app.models import User, Post, Comment, Like
+    from app.models import User, Post, Comment, Like, Dislike
     app.register_blueprint(views, url_prefix = "/")
     app.register_blueprint(auth, url_prefix = "/")
     
