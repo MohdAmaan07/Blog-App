@@ -24,27 +24,18 @@
                 <span>{{ post.date_posted }}</span>
             </div>
             {% if current_user.is_authenticated %}
-            <div class="flex space-x-4 mb-2">
-                <a href="{{ url_for('views.like_post', id=post.id) }}" class="text-gray-700 hover:text-blue-700">
-                    {% if current_user.id in post.likes|map(attribute = "author")|list %}
-                        <img src="{{ url_for('static', filename='svg/thumbs-up-solid.svg') }}" alt="Thumbs Up Solid">
-                        <span class="m-1">{{ post.likes|length }}</span>
-                    {% else %}
-                        <img src="{{ url_for('static', filename='svg/thumbs-up.svg') }}" alt="Thumbs Up">
-                        <span class="m-1">Like</span>
-                    {% endif %}
-                </a>
+            <div class="flex justify-start gap-4 mb-2">
+                <span id="like-{{post.id}}" onclick="likes('{{post.id}}')" class="flex items-center text-gray-700 hover:text-blue-700">
+                    <img id="like-img-{{post.id}}" src="{{ url_for('static', filename='svg/thumbs-up.svg') }}" alt="Thumbs Up Solid" class="h-6 w-6">
+                    <span class="ml-1" id="like-count-{{post.id}}">Like</span>
+                </span>
                 
-                <a href="{{ url_for('views.dislike_post', id=post.id) }}" class="text-gray-700 hover:text-blue-700">
-                    {% if current_user.id in post.dislikes|map(attribute = "author")|list %}
-                        <img src="{{ url_for('static', filename='svg/thumbs-down-solid.svg') }}" alt="Thumbs Down Solid">
-                        <span class="m-1">{{ post.dislikes|length }}</span>
-                    {% else %}
-                        <img src="{{ url_for('static', filename='svg/thumbs-down.svg') }}" alt="Thumbs Down">
-                        <span class="m-1">Dislike</span>
-                    {% endif %}
-                </a>
+                <span id="dislike-{{post.id}}" onclick="dislikes('{{post.id}}')" class="flex items-center text-gray-700 hover:text-blue-700">
+                    <img id="dislike-img-{{post.id}}" src="{{ url_for('static', filename='svg/thumbs-down.svg') }}" alt="Thumbs Down Solid" class="h-6 w-6">
+                    <span class="ml-1" id="dislike-count-{{post.id}}">Dislike</span>
+                </span>
             </div>
+            
             
             {% endif %}
 

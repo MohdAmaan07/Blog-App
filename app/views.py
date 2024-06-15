@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,redirect, request, flash,redirect,url_for
+from flask import Blueprint, render_template,redirect, request, flash,redirect,url_for, jsonify
 from .models import Post,Comment, Like,Dislike
 from app import db
 from datetime import timezone, datetime
@@ -92,7 +92,7 @@ def delete_comment(id):
     
     return redirect(url_for("views.home"))
 
-@views.route('/like/<int:id>', methods=['GET'])
+@views.route('/like/<int:id>', methods=['POST'])
 @login_required
 def like_post(id):
     post = Post.query.get_or_404(id)
@@ -102,18 +102,16 @@ def like_post(id):
     if like:
         db.session.delete(like)
         db.session.commit()
-        print("in if")
     else:
-        print("in else")
         if dislike:
             db.session.delete(dislike)
         new_like = Like(author=current_user.id, post_id=id)
         db.session.add(new_like)
         db.session.commit()
 
-    return redirect(url_for('views.home'))
+    return jsonify({'likes': len(post.likes), "liked": current_user.id in [like.author for like in post.likes]})
 
-@views.route('/dislike/<int:id>', methods=['GET'])
+@views.route('/dislike/<int:id>', methods=['POST'])
 @login_required
 def dislike_post(id):
     post = Post.query.get_or_404(id)
@@ -130,7 +128,7 @@ def dislike_post(id):
         db.session.add(new_dislike)
         db.session.commit()
 
-    return redirect(url_for('views.home'))
+    return jsonify({'dislikes': len(post.dislikes), "disliked": current_user.id in [dislike.author for dislike in post.dislikes]})
 
 
     
