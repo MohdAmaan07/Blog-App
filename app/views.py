@@ -102,7 +102,9 @@ def like_post(id):
     if like:
         db.session.delete(like)
         db.session.commit()
+        print("in if")
     else:
+        print("in else")
         if dislike:
             db.session.delete(dislike)
         new_like = Like(author=current_user.id, post_id=id)

@@ -26,13 +26,7 @@
             {% if current_user.is_authenticated %}
             <div class="flex space-x-4 mb-2">
                 <a href="{{ url_for('views.like_post', id=post.id) }}" class="text-gray-700 hover:text-blue-700">
-                    {% set liked = false %}
-                    {% for like in post.likes %}
-                        {% if like.author == current_user.id %}
-                            {% set liked = true %}
-                        {% endif %}
-                    {% endfor %}
-                    {% if liked %}
+                    {% if current_user.id in post.likes|map(attribute = "author")|list %}
                         <img src="{{ url_for('static', filename='svg/thumbs-up-solid.svg') }}" alt="Thumbs Up Solid">
                         <span class="m-1">{{ post.likes|length }}</span>
                     {% else %}
@@ -42,13 +36,7 @@
                 </a>
                 
                 <a href="{{ url_for('views.dislike_post', id=post.id) }}" class="text-gray-700 hover:text-blue-700">
-                    {% set disliked = false %}
-                    {% for dislike in post.dislikes %}
-                        {% if dislike.author == current_user.id %}
-                            {% set disliked = true %}
-                        {% endif %}
-                    {% endfor %}
-                    {% if disliked %}
+                    {% if current_user.id in post.dislikes|map(attribute = "author")|list %}
                         <img src="{{ url_for('static', filename='svg/thumbs-down-solid.svg') }}" alt="Thumbs Down Solid">
                         <span class="m-1">{{ post.dislikes|length }}</span>
                     {% else %}
