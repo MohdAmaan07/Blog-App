@@ -1,5 +1,9 @@
 {% extends "post_template.html" %}
-{% block title %}{{posts[0].user.username}}'s Post{% endblock %}
+{% block title %}{% if posts[0].user.username %}
+    {{posts[0].user.username}}
+    {% else %}  {{current_user.username}}'s 
+    {% endif %}'s post
+    {% endblock %}
 {% block comment %}
     
 {% endblock comment %}
